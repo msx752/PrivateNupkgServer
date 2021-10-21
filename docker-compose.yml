@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  privatenupkgserver:
+    image: ${DOCKER_REGISTRY-}privatenupkgserver
+    build:
+      context: .
+      dockerfile: PrivateNupkgServer/Dockerfile
