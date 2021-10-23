@@ -19,6 +19,9 @@ namespace privatenupkgserver.Controllers
         [HttpDelete("package/{nugetId}/{nugetVersion}")]
         public IActionResult PackageDelete(string nugetId, string nugetVersion) => Redirect($"~{options.Value.GetApiMajorVersionUrl()}/package/{nugetId}/{nugetVersion}");
 
+        [HttpGet("package/{nugetId}/{nugetVersion}")]
+        public IActionResult PackageGet(string nugetId, string nugetVersion) => Redirect($"~{options.Value.GetApiMajorVersionUrl()}/flatcontainer/{nugetId}/{nugetVersion}/{nugetId}.{nugetVersion}.nupkg");
+
         [HttpPut("package")]
         public IActionResult PackagePut([FromRoute] NugetImportModel model) => Redirect($"~{options.Value.GetApiMajorVersionUrl()}/package");
     }
