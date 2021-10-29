@@ -5,50 +5,39 @@ namespace privatenupkgserver
 {
     public static class NugetServerResourceTypeExtension
     {
-        public const string PackageBaseAddress = nameof(PackageBaseAddress) + "/3.0.0";
-        public const string PackagePublish = nameof(PackagePublish) + "/2.0.0";
-        public const string RegistrationsBaseUrl = nameof(RegistrationsBaseUrl);
-        public const string RegistrationsBaseUrl_3_0_0_beta = nameof(RegistrationsBaseUrl) + "/3.0.0-beta";
-        public const string RegistrationsBaseUrl_3_0_0_rc = nameof(RegistrationsBaseUrl) + "/3.0.0-rc";
-        public const string RegistrationsBaseUrl_3_4_0 = nameof(RegistrationsBaseUrl) + "/3.4.0";
-        public const string RegistrationsBaseUrl_3_6_0 = nameof(RegistrationsBaseUrl) + "/3.6.0";
-        public const string SearchQueryService = nameof(SearchQueryService);
-        public const string SearchQueryService_3_0_0_beta = nameof(SearchQueryService) + "/3.0.0-beta";
-        public const string SearchQueryService_3_0_0_rc = nameof(SearchQueryService) + "/3.0.0-rc";
-
         public static string GetText(this NugetServerResourceType resourceType)
         {
             switch (resourceType)
             {
                 case NugetServerResourceType.PackageBaseAddress:
-                    return PackageBaseAddress;
+                    return $"{NugetServerResourceType.PackageBaseAddress}/3.0.0";
 
                 case NugetServerResourceType.PackagePublish:
-                    return PackagePublish;
+                    return $"{NugetServerResourceType.PackagePublish}/2.0.0";
 
                 case NugetServerResourceType.RegistrationsBaseUrl:
-                    return RegistrationsBaseUrl;
+                    return $"{NugetServerResourceType.RegistrationsBaseUrl}";
 
                 case NugetServerResourceType.RegistrationsBaseUrl_3_0_0_beta:
-                    return RegistrationsBaseUrl_3_0_0_beta;
+                    return $"{NugetServerResourceType.RegistrationsBaseUrl}/3.0.0-beta";
 
                 case NugetServerResourceType.RegistrationsBaseUrl_3_0_0_rc:
-                    return RegistrationsBaseUrl_3_0_0_rc;
+                    return $"{NugetServerResourceType.RegistrationsBaseUrl}/3.0.0-rc";
 
                 case NugetServerResourceType.RegistrationsBaseUrl_3_4_0:
-                    return RegistrationsBaseUrl_3_4_0;
+                    return $"{NugetServerResourceType.RegistrationsBaseUrl}/3.4.0";
 
                 case NugetServerResourceType.RegistrationsBaseUrl_3_6_0:
-                    return RegistrationsBaseUrl_3_6_0;
+                    return $"{NugetServerResourceType.RegistrationsBaseUrl}/3.6.0";
 
                 case NugetServerResourceType.SearchQueryService:
-                    return SearchQueryService;
+                    return $"{NugetServerResourceType.SearchQueryService}";
 
                 case NugetServerResourceType.SearchQueryService_3_0_0_beta:
-                    return SearchQueryService_3_0_0_beta;
+                    return $"{NugetServerResourceType.SearchQueryService}/3.0.0-beta";
 
                 case NugetServerResourceType.SearchQueryService_3_0_0_rc:
-                    return SearchQueryService_3_0_0_rc;
+                    return $"{NugetServerResourceType.SearchQueryService}/3.0.0-rc";
 
                 default:
                     break;
