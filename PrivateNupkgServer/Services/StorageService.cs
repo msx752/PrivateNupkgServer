@@ -193,57 +193,40 @@ namespace privatenupkgserver.Services
                 {
                     new RegistrationLeafOutputModel
                     {
-                         Id =  registrationInput.BaseUrl +
-                             registrationInput.PathBase +
-                             $"/{metadata.Version}.json",
-                         PackageContent =  packageContentBase +
-                             $"/{metadata.Id.ToLowerInvariant()}" +
-                             $"/{metadata.Version.ToLowerInvariant()}" +
-                             $"/{metadata.Id.ToLowerInvariant()}" +
-                             $".{metadata.Version.ToLowerInvariant()}.nupkg",
-                         Registration = registrationInput.BaseUrl +
-                            registrationInput.Path,
+                         Id =  $"{registrationInput.BaseUrl + registrationInput.PathBase}/{metadata.Version}.json",
+                         PackageContent =  $"{packageContentBase}/{metadata.Id.ToLowerInvariant()}/{metadata.Version.ToLowerInvariant()}/{metadata.Id.ToLowerInvariant()}.{metadata.Version.ToLowerInvariant()}.nupkg",
+                         Registration = registrationInput.BaseUrl + registrationInput.Path,
                          CatalogEntry = new RegistrationCatalogEntryOutputModel
                          {
-                            Id_alias = registrationInput.BaseUrl +
-                                registrationInput.PathBase +
-                                $"/{metadata.Version}.json",
+                            Id_alias = registrationInput.BaseUrl + registrationInput.PathBase + $"/{metadata.Version}.json",
                             Id = metadata.Id,
                             Authors = metadata.Authors,
                             Description = metadata.Description,
                             ProjectUrl = metadata.ProjectUrl,
                             IconUrl = metadata.IconUrl,
                             Summary = metadata.ReleaseNotes ?? metadata.Description,
-                            Tags = metadata.Tags?.Split(
-                                new[] { ',' },
-                                StringSplitOptions.RemoveEmptyEntries)
-                            ?.ToList() ?? new List<string>(0),
+                            Tags = metadata.Tags?.Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries) ?.ToList() ?? new List<string>(0),
                             Title = metadata.Id,
                             Version = metadata.Version,
                             LicenseUrl = metadata.LicenseUrl,
                             Listed = !IsDeleted(metadata.Id,metadata.Version),
                             RequireLicenseAcceptance = metadata.RequireLicenseAcceptance,
-                            PackageContent =  packageContentBase +
-                             $"/{metadata.Id.ToLowerInvariant()}" +
-                             $"/{metadata.Version.ToLowerInvariant()}" +
-                             $"/{metadata.Id.ToLowerInvariant()}" +
-                             $".{metadata.Version.ToLowerInvariant()}.nupkg",
+                            PackageContent =  $"{packageContentBase}/{metadata.Id.ToLowerInvariant()}/{metadata.Version.ToLowerInvariant()}/{metadata.Id.ToLowerInvariant()}.{metadata.Version.ToLowerInvariant()}.nupkg",
                             Published = publishTime,
-                            DependencyGroups = metadata.Dependencies
-                                .Select(deps=>
+                            DependencyGroups = metadata.Dependencies.Select(deps=>
                                 new RegistrationDependencyGroupOutputModel
                                 {
                                     //Id_alias = ""
                                     TargetFramework = deps.TargetFramework,
                                     Dependencies  = deps.Dependency.Select(dep=>
-                                    new RegistrationDependencyOutputModel
-                                    {
-                                         Id = dep.Id,
-                                         //Id_Alias = "",
-                                         Range = dep.Version,
-                                         Registration = registrationInput.BaseUrl +
-                                             registrationInput.Path
-                                    }).ToList()
+                                        new RegistrationDependencyOutputModel
+                                        {
+                                                Id = dep.Id,
+                                                //Id_Alias = "",
+                                                Range = dep.Version,
+                                                Registration = registrationInput.BaseUrl +
+                                                    registrationInput.Path
+                                        }).ToList()
                                 }).ToList()
                          }
                     }
