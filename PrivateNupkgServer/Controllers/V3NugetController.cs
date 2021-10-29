@@ -34,7 +34,6 @@ namespace privatenupkgserver.Controllers
         }
 
         [AllowAnonymous]
-        //[HttpHead("index.json")]
         [HttpGet("index.json")]
         public IActionResult ServerIndex()
         {
@@ -90,6 +89,9 @@ namespace privatenupkgserver.Controllers
         [HttpPut("package")]
         public async Task<IActionResult> PackagePut([FromRoute] NugetImportModel model)
         {
+            if (!this.ModelState.IsValid)
+                return BadRequest();
+
             using (Stream nstream = model.Package.OpenReadStream())
             {
                 Nuspec nuspec = await Zip.ReadNuspecFromPackageAsync(nstream);
