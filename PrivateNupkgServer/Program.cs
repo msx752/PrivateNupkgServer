@@ -23,7 +23,7 @@ app.UseAuthorization();
 app.UseNugetServer();
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.MapGet("/", () => ".NET 6.0 server is running!");
+app.MapGet("/", [AllowAnonymous] () => ".NET 6.0 server is running!");
 
 app.MapDelete("api/v2/package/{nugetId}/{nugetVersion}", [AllowAnonymous] ([FromServices] IOptions<NugetServerOption> options, HttpContext http, string nugetId, string nugetVersion) =>
     http.Response.Redirect($"~{options.Value.GetApiMajorVersionUrl()}/package/{nugetId}/{nugetVersion}"));
