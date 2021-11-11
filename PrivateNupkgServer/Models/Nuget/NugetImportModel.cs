@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿namespace privatenupkgserver.Models.Nuget;
 
-namespace privatenupkgserver.Models.Nuget
+public class NugetImportModel
 {
-    public class NugetImportModel
-    {
-        [Required]
-        public IFormFile Package { get; set; }
-    }
+    [Required]
+    public IFormFile? Package { get; set; }
 }

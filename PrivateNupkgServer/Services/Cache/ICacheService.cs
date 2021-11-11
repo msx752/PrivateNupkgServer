@@ -1,24 +1,18 @@
-﻿using privatenupkgserver.Models.Nuspec;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿namespace privatenupkgserver.Services.Cache;
 
-namespace privatenupkgserver.Services.Cache
+public interface ICacheService
 {
-    public interface ICacheService
-    {
-        void UpdateCachedNupkg(string Id, string version, byte[] Nupkg);
+    void UpdateCachedNupkg(string Id, string version, byte[] Nupkg);
 
-        Stream GetCachedNupkg(string Id, string version);
+    Stream GetCachedNupkg(string Id, string version);
 
-        void InitCacheService(Func<IEnumerable<Nuspec>> funcNuspec);
+    void InitCacheService(Func<IEnumerable<Nuspec>> funcNuspec);
 
-        void UpdateCachedNuspec(string Id, string version, Nuspec nuspec);
+    void UpdateCachedNuspec(string Id, string version, Nuspec nuspec);
 
-        void DeleteCachedNupkg(string Id, string version);
+    void DeleteCachedNupkg(string Id, string version);
 
-        Nuspec GetCachedNuspec(string Id, string version);
+    Nuspec GetCachedNuspec(string Id, string version);
 
-        IEnumerable<Nuspec> GetCachedNuspecs();
-    }
+    IEnumerable<Nuspec> GetCachedNuspecs();
 }

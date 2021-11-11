@@ -1,8 +1,7 @@
-﻿namespace privatenupkgserver.Enums
+﻿namespace privatenupkgserver.Enums;
+
+public enum NugetStorageType
 {
-    public enum NugetStorageType
-    {
-        LocalDisk = 0,
-        AzureBlobStorage = 1
-    }
+    LocalDisk = 0,
+    AzureBlobStorage = 1
 }

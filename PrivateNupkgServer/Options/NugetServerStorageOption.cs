@@ -1,15 +1,12 @@
-﻿using privatenupkgserver.Enums;
+﻿namespace privatenupkgserver.Options;
 
-namespace privatenupkgserver.Options
+public class NugetServerStorageOption
 {
-    public class NugetServerStorageOption
+    public NugetServerStorageOption()
     {
-        public NugetServerStorageOption()
-        {
-            SelectedType = NugetStorageType.LocalDisk;
-        }
-
-        public NugetStorageType SelectedType { get; set; }
-        public string AzureStorageConnectionString { get; set; }
+        SelectedType = NugetStorageType.LocalDisk;
     }
+
+    public NugetStorageType SelectedType { get; set; }
+    public string AzureStorageConnectionString { get; set; }
 }

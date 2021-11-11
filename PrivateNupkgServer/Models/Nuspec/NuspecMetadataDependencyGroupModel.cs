@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿namespace privatenupkgserver.Models.Nuspec;
 
-namespace privatenupkgserver.Models.Nuspec
+[Serializable]
+public class NuspecMetadataDependencyGroupModel
 {
-    [Serializable]
-    public class NuspecMetadataDependencyGroupModel
-    {
-        [XmlAttribute("targetFramework")]
-        public string TargetFramework { get; set; }
+    [XmlAttribute("targetFramework")]
+    public string? TargetFramework { get; set; }
 
-        [XmlElement("dependency")]
-        public List<NuspecMetadataDependencyModel> Dependency { get; set; }
-    }
+    [XmlElement("dependency")]
+    public List<NuspecMetadataDependencyModel>? Dependency { get; set; }
 }

@@ -1,6 +1,5 @@
-﻿namespace privatenupkgserver.Services.AzureBlobStorage
+﻿namespace privatenupkgserver.Services.AzureBlobStorage;
+
+public interface IAzureBlobStorageService : IStorageService
 {
-    public interface IAzureBlobStorageService : IStorageService
-    {
-    }
 }

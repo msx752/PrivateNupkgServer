@@ -1,66 +1,59 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
+﻿namespace privatenupkgserver.Models.Nuspec;
 
-namespace privatenupkgserver.Models.Nuspec
+[Serializable]
+[XmlRoot("package")]
+public class Nuspec
 {
-    [Serializable]
-    [XmlRoot("package")]
-    public class Nuspec
+    [XmlElement("metadata")]
+    public NuspecMetadataModel? Metadata { get; set; }
+
+    [XmlIgnore]
+    [JsonIgnore]
+    public string? FilePath { get; set; }
+
+    [XmlIgnore]
+    [JsonIgnore]
+    public DateTimeOffset? PublishTime { get; set; }
+
+    static Nuspec()
     {
-        [XmlElement("metadata")]
-        public NuspecMetadataModel Metadata { get; set; }
+        SerializerFactory = new XmlSerializerFactory();
+        NuspecSerializer = SerializerFactory.CreateSerializer(typeof(Nuspec));
+    }
 
-        [XmlIgnore]
-        [JsonIgnore]
-        public string FilePath { get; set; }
+    private static readonly XmlSerializerFactory SerializerFactory;
 
-        [XmlIgnore]
-        [JsonIgnore]
-        public DateTimeOffset? PublishTime { get; set; }
+    private static readonly XmlSerializer NuspecSerializer;
 
-        static Nuspec()
-        {
-            SerializerFactory = new XmlSerializerFactory();
-            NuspecSerializer = SerializerFactory.CreateSerializer(typeof(Nuspec));
-        }
-
-        private static readonly XmlSerializerFactory SerializerFactory;
-
-        private static readonly XmlSerializer NuspecSerializer;
-
-        public static bool TryParse(byte[] metadata, out Nuspec nuspec)
-        {
-            if (metadata == null)
-            {
-                nuspec = null;
-                return false;
-            }
-            using var inputStream = new MemoryStream(metadata);
-            return TryParse(inputStream, out nuspec);
-        }
-
-        public static bool TryParse(Stream stream, out Nuspec nuspec)
+    public static bool TryParse(byte[] metadata, out Nuspec? nuspec)
+    {
+        if (metadata == null)
         {
             nuspec = null;
-            if (stream == null)
-                return false;
-            try
-            {
-                using (var xmlReader = new XmlTextReader(stream))
-                {
-                    //annoying diff xmlns
-                    xmlReader.Namespaces = false;
-                    nuspec = (Nuspec)NuspecSerializer.Deserialize(xmlReader);
-                    return true;
-                }
-            }
-            catch
-            {
-            }
             return false;
         }
+        using var inputStream = new MemoryStream(metadata);
+        return TryParse(inputStream, out nuspec);
+    }
+
+    public static bool TryParse(Stream stream, out Nuspec? nuspec)
+    {
+        nuspec = null;
+        if (stream == null)
+            return false;
+        try
+        {
+            using (var xmlReader = new XmlTextReader(stream))
+            {
+                //annoying diff xmlns
+                xmlReader.Namespaces = false;
+                nuspec = (Nuspec)NuspecSerializer.Deserialize(xmlReader);
+                return true;
+            }
+        }
+        catch
+        {
+        }
+        return false;
     }
 }

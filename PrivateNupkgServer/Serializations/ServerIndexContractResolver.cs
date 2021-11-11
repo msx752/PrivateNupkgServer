@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿namespace privatenupkgserver.Serializations;
 
-namespace privatenupkgserver.Serializations
+public class ServerIndexContractResolver : DefaultContractResolver
 {
-    public class ServerIndexContractResolver : DefaultContractResolver
+    public ServerIndexContractResolver()
     {
-        public ServerIndexContractResolver()
-        {
-            NamingStrategy = new ServerIndexNamingStrategy();
-        }
+        NamingStrategy = new ServerIndexNamingStrategy();
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace privatenupkgserver.Services.LocalDisk
+﻿namespace privatenupkgserver.Services.LocalDisk;
+
+public interface ILocalDiskStorageService : IStorageService
 {
-    public interface ILocalDiskStorageService : IStorageService
-    {
-    }
 }

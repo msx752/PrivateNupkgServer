@@ -1,34 +1,29 @@
-﻿using Newtonsoft.Json.Serialization;
-using privatenupkgserver.Models.ServerIndex;
-using System.Linq;
+﻿namespace privatenupkgserver.Serializations;
 
-namespace privatenupkgserver.Serializations
+public class ServerIndexNamingStrategy : CamelCaseNamingStrategy
 {
-    public class ServerIndexNamingStrategy : CamelCaseNamingStrategy
+    static ServerIndexNamingStrategy()
     {
-        static ServerIndexNamingStrategy()
+        PropertyNameNeedPrefix = new[]
         {
-            PropertyNameNeedPrefix = new[]
-            {
                 nameof(ServerIndexContext.Vocab),
                 nameof(ServerIndexModel.Context),
                 nameof(ServerIndexResourceModel.Id),
                 nameof(ServerIndexResourceModel.Type),
             };
-        }
+    }
 
-        public static string[] PropertyNameNeedPrefix { get; private set; }
+    public static string[] PropertyNameNeedPrefix { get; private set; }
 
-        public const string PropertyNamePrefix = @"@";
+    public const string PropertyNamePrefix = @"@";
 
-        protected override string ResolvePropertyName(string name)
+    protected override string ResolvePropertyName(string name)
+    {
+        var resolved = base.ResolvePropertyName(name);
+        if (PropertyNameNeedPrefix.Any(p => p == name))
         {
-            var resolved = base.ResolvePropertyName(name);
-            if (PropertyNameNeedPrefix.Any(p => p == name))
-            {
-                return PropertyNamePrefix + resolved;
-            }
-            return resolved;
+            return PropertyNamePrefix + resolved;
         }
+        return resolved;
     }
 }

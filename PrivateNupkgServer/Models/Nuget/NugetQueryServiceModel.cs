@@ -1,31 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Xml.Serialization;
+﻿namespace privatenupkgserver.Models.Nuget;
 
-namespace privatenupkgserver.Models.Nuget
+public class NugetQueryServiceModel
 {
-    public class NugetQueryServiceModel
-    {
-        [FromQuery]
-        public string q { get; set; }
+    public string? q { get; set; }
 
-        [FromQuery]
-        public int skip { get; set; }
+    public int skip { get; set; }
 
-        [FromQuery]
-        public int take { get; set; }
+    public int take { get; set; }
 
-        [FromQuery]
-        public bool prerelease { get; set; }
+    public bool prerelease { get; set; }
 
-        [FromQuery]
-        public string[] supportedFramework { get; set; }
+    public string[]? supportedFramework { get; set; }
 
-        [FromQuery]
-        public string semVerLevel { get; set; }
+    public string? semVerLevel { get; set; }
 
-        [XmlIgnore]
-        [JsonIgnore]
-        public NuGetVersionString NuGetVersion { get => (NuGetVersionString)semVerLevel; }
-    }
+    [XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public NuGetVersionString NuGetVersion { get => (NuGetVersionString)semVerLevel; }
 }

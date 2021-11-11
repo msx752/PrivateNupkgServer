@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
+﻿namespace privatenupkgserver.Models.PackageBaseAddress;
 
-namespace privatenupkgserver.Models.PackageBaseAddress
+public class PackageBaseAddressVersionsOutputModel
 {
-    public class PackageBaseAddressVersionsOutputModel
+    public PackageBaseAddressVersionsOutputModel()
     {
-        public PackageBaseAddressVersionsOutputModel()
-        {
-            Versions = new List<string>(0);
-        }
-
-        public List<string> Versions { get; set; }
+        Versions = new List<string>(0);
     }
+
+    public List<string> Versions { get; set; }
 }
