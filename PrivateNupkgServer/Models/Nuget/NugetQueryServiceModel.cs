@@ -2,22 +2,30 @@
 
 public class NugetQueryServiceModel
 {
-    [FromQuery]
+    public NugetQueryServiceModel()
+    {
+    }
+
+    public NugetQueryServiceModel(IQueryCollection queryCollection)
+    {
+        q = queryCollection[nameof(q)];
+        skip = int.Parse(queryCollection[nameof(skip)]);
+        take = int.Parse(queryCollection[nameof(take)]);
+        prerelease = bool.Parse(queryCollection[nameof(prerelease)]);
+        semVerLevel = queryCollection[nameof(semVerLevel)];
+        supportedFramework = queryCollection[nameof(supportedFramework)];
+    }
+
     public string? q { get; set; }
 
-    [FromQuery]
     public int skip { get; set; }
 
-    [FromQuery]
     public int take { get; set; }
 
-    [FromQuery]
     public bool prerelease { get; set; }
 
-    [FromQuery]
     public string[]? supportedFramework { get; set; }
 
-    [FromQuery]
     public string? semVerLevel { get; set; }
 
     [XmlIgnore]

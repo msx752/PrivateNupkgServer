@@ -10,6 +10,7 @@ global using Microsoft.OpenApi.Models;
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Serialization;
 global using NuGet.Versioning;
+global using privatenupkgserver;
 global using privatenupkgserver.Converters;
 global using privatenupkgserver.Enums;
 global using privatenupkgserver.Extensions;

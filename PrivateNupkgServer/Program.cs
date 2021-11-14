@@ -23,6 +23,30 @@ app.UseAuthorization();
 app.UseNugetServer();
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
+var putPackage =[Authorize] async (HttpRequest req, [FromServices] INupkgProvider nupkgProvider) =>
+{
+    if (!req.HasFormContentType)
+        return Results.BadRequest();
+
+    var form = req.Form.Files.FirstOrDefault();
+    if (form is null)
+        return Results.BadRequest();
+
+    using (Stream nstream = form.OpenReadStream())
+    {
+        Nuspec nuspec = await Zip.ReadNuspecFromPackageAsync(nstream);
+        if (nuspec?.Metadata == null)
+            return Results.BadRequest();
+
+        if (nupkgProvider.ContainsNuspec(nuspec.Metadata.Id, nuspec.Metadata.Version))
+            return Results.Conflict();
+
+        nstream.Seek(0, SeekOrigin.Begin);
+        await nupkgProvider.AddNupkgAsync(nuspec.Metadata.Id, nuspec.Metadata.Version, nstream);
+        return Results.StatusCode((int)HttpStatusCode.Created);
+    }
+};
+
 app.MapGet("/", [AllowAnonymous] () => ".NET 6.0 server is running!");
 
 app.MapDelete("api/v2/package/{nugetId}/{nugetVersion}", [AllowAnonymous] ([FromServices] IOptions<NugetServerOption> options, HttpContext http, string nugetId, string nugetVersion) =>
@@ -31,14 +55,13 @@ app.MapDelete("api/v2/package/{nugetId}/{nugetVersion}", [AllowAnonymous] ([From
 app.MapGet("api/v2/package/{nugetId}/{nugetVersion}", [AllowAnonymous] ([FromServices] IOptions<NugetServerOption> options, HttpContext http, string nugetId, string nugetVersion) =>
     http.Response.Redirect($"~{options.Value.GetApiMajorVersionUrl()}/flatcontainer/{nugetId}/{nugetVersion}/{nugetId}.{nugetVersion}.nupkg"));
 
-//app.MapPut("api/v2/package", [AllowAnonymous] ([FromServices] IOptions<NugetServerOption> options, HttpContext http, [FromRoute] NugetImportModel model) =>
-//    http.Response.Redirect($"~{options.Value.GetApiMajorVersionUrl()}/package"));
+app.MapPut("api/v2/package", putPackage);
 
 app.MapGet("v3/index.json", [AllowAnonymous] ([FromServices] INupkgProvider nupkgProvider, HttpContext http) =>
      ResponseNugetModel(nupkgProvider.GetServerIndex(http.GetBaseUrl()), (jsr) => { jsr.ContractResolver = new ServerIndexContractResolver(); jsr.Formatting = Newtonsoft.Json.Formatting.Indented; }));
 
-//app.MapGet("v3/query", [Authorize] ([FromServices] INupkgProvider nupkgProvider, HttpContext http, [FromQuery] string q, [FromQuery] int skip, [FromQuery] int take, [FromQuery] bool prerelease, [FromQuery] string[] supportedFramework) =>
-//     ResponseNugetModel(nupkgProvider.SearchQuery(new NugetQueryServiceModel() { q = q, skip = skip, take = take, prerelease = prerelease, supportedFramework = supportedFramework?.ToArray() }, http.GetBaseUrl())));
+app.MapGet("v3/query", [Authorize] ([FromServices] INupkgProvider nupkgProvider, HttpContext http) =>
+    ResponseNugetModel(nupkgProvider.SearchQuery(new NugetQueryServiceModel(http.Request.Query), http.GetBaseUrl())));
 
 app.MapGet("v3/flatcontainer/{packageName}/{packageVersion}/{nupkgName:regex(([[a-zA-Z0-9]]+[[\\.]])+)}.nupkg", [Authorize] ([FromServices] INupkgProvider nupkgProvider, string packageName, string packageVersion, string nupkgName) =>
 {
@@ -71,27 +94,7 @@ app.MapDelete("v3/package/{packageName}/{packageVersion}", [Authorize] ([FromSer
     return Results.Ok();
 });
 
-//app.MapPut("v3/package", [Authorize] async (HttpContext http, IValidator<NugetImportModel> validator, [FromRoute] NugetImportModel model) =>
-//{
-//    ////USE FluentValidation package
-
-//    if (!this.ModelState.IsValid)
-//        return Results.BadRequest();
-
-//    using (Stream nstream = model.Package.OpenReadStream())
-//    {
-//        Nuspec nuspec = await Zip.ReadNuspecFromPackageAsync(nstream);
-//        if (nuspec?.Metadata == null)
-//            return Results.BadRequest();
-
-//        if (nupkgProvider.ContainsNuspec(nuspec.Metadata.Id, nuspec.Metadata.Version))
-//            return Conflict();
-
-//        nstream.Seek(0, SeekOrigin.Begin);
-//        await nupkgProvider.AddNupkgAsync(nuspec.Metadata.Id, nuspec.Metadata.Version, nstream);
-//        return Results.StatusCode((int)HttpStatusCode.Created);
-//    }
-//});
+app.MapPut("v3/package", putPackage);
 
 IResult ResponseNugetModel(object objModel, Action<JsonSerializerSettings>? funcJsonSerializerSettings = null)
 {
